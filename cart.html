@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Giỏ hàng - WBS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <nav class="topbar__menu">
+        <a href="index.html">Trang chủ</a>
+        <a href="index.html">Sản phẩm</a>
+      </nav>
+      <div class="topbar__brand-wrapper">
+        <div class="topbar__brand">
+          <a href="index.html">WBS</a>
+        </div>
+      </div>
+      <div class="topbar__actions">
+        <div class="search">
+          <input placeholder="Tìm kiếm sản phẩm" />
+          <button aria-label="Tìm kiếm"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+        <a href="login.html" class="header-action-btn header-user">
+          <i class="fa-solid fa-user"></i> Tài khoản
+        </a>
+        <a href="cart.html" class="header-cart-wrapper">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span class="header-cart-badge" id="cartBadge">0</span>
+        </a>
+      </div>
+      <button class="hamburger" aria-label="Mở menu">☰</button>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="breadcrumbs">
+    <div class="container">
+      <a href="index.html">Trang chủ</a>
+      <span> - </span>
+      <span>Giỏ hàng</span>
+    </div>
+  </nav>
+
+  <!-- Cart Section -->
+  <section class="cart-section">
+    <div class="container">
+      <h1 class="cart-title">Giỏ hàng của bạn</h1>
+
+      <div class="cart-wrapper">
+        <!-- Cart Items -->
+        <div class="cart-items">
+          <!-- Cart Header -->
+          <div class="cart-header">
+            <div class="cart-header-item">Sản phẩm</div>
+            <div class="cart-header-item">Giá</div>
+            <div class="cart-header-item">Số lượng</div>
+            <div class="cart-header-item">Tổng</div>
+            <div class="cart-header-item"></div>
+          </div>
+
+          <!-- Các sản phẩm sẽ được render động từ JavaScript (localStorage) -->
+        </div>
+
+        <!-- Cart Summary -->
+        <div class="cart-summary">
+          <div class="summary-card">
+            <h3 class="summary-title">Tóm tắt đơn hàng</h3>
+            
+            <div class="summary-row">
+              <span>Tạm tính</span>
+              <span id="subtotal">2.670.000₫</span>
+            </div>
+            
+            <div class="summary-row">
+              <span>Phí vận chuyển</span>
+              <span id="shipping">30.000₫</span>
+            </div>
+            
+            <div class="summary-divider"></div>
+            
+            <div class="summary-row summary-total">
+              <span>Tổng cộng</span>
+              <span id="grandTotal">₫</span>
+            </div>
+
+            <button class="btn-checkout" onclick="checkout()">
+              <i class="fas fa-shopping-bag"></i>
+              THANH TOÁN
+            </button>
+
+            <a href="index.html" class="continue-shopping">
+              <i class="fas fa-arrow-left"></i>
+              Tiếp tục mua sắm
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Empty Cart Message (hidden by default) -->
+      <div class="empty-cart" id="emptyCart" style="display: none;">
+        <h2>Giỏ hàng của bạn đang trống</h2>
+        <a href="index.html" class="btn btn-primary">Mua sắm ngay</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chatbot Widget -->
+  <div class="chatbot-container">
+    <button class="chatbot-button" onclick="toggleChatbot()">💬</button>
+    <div class="chatbot-window" id="chatbotWindow">
+      <div class="chatbot-header">
+        <h3>WBS Chat với chúng tôi</h3>
+        <button class="chatbot-close" onclick="toggleChatbot()">×</button>
+      </div>
+      <div class="chatbot-messages" id="chatbotMessages">
+        <div class="message bot">
+          <div class="message-avatar">WBS</div>
+          <div>
+            <div class="message-content">
+              Xin chào! Tôi là chatbot của WBS. Tôi có thể giúp gì cho bạn?
+            </div>
+            <div class="quick-replies">
+              <span class="quick-reply" onclick="sendQuickReply('Sản phẩm nào đang hot?')">Sản phẩm hot</span>
+              <span class="quick-reply" onclick="sendQuickReply('Giá cả như thế nào?')">Giá cả</span>
+              <span class="quick-reply" onclick="sendQuickReply('Chính sách đổi trả')">Đổi trả</span>
+              <span class="quick-reply" onclick="sendQuickReply('Vận chuyển')">Vận chuyển</span>
+              <span class="quick-reply" onclick="sendQuickReply('Liên hệ hotline')">Liên hệ hotline</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chatbot-input">
+        <input type="text" id="chatbotInput" placeholder="Nhập tin nhắn..." onkeypress="handleKeyPress(event)">
+        <button class="chatbot-send" onclick="sendMessage()">➤</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="chatbot.js"></script>
+</body>
+</html>
+

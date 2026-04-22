@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Đơn hàng của bạn - WBS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .orders-container {
+      max-width: 1000px;
+      margin: 60px auto;
+      padding: 40px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    .orders-container h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+    }
+
+    .order-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .order-table th,
+    .order-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    .order-table th {
+      background: #f9f9f9;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .status-badge {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: normal;
+    }
+
+    .status-pending {
+      background: transparent;
+      color: #000;
+    }
+
+    .status-completed {
+      background: transparent;
+      color: #000;
+    }
+
+    .status-shipping {
+      background: transparent;
+      color: #000;
+    }
+
+    .status-pending-pay {
+      background: transparent;
+      color: #000;
+    }
+
+    .status-paid {
+      background: transparent;
+      color: #000;
+    }
+
+
+
+    @media (max-width: 768px) {
+      .order-table thead {
+        display: none;
+      }
+
+      .order-table tr {
+        display: block;
+        margin-bottom: 20px;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        padding: 10px;
+      }
+
+      .order-table td {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 5px;
+        border: none;
+      }
+
+      .order-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+      }
+    }
+
+    .btn-details {
+      padding: 6px 12px;
+      background: #000;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-details:hover {
+      background: #333;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <nav class="topbar__menu">
+        <a href="index.html">Trang chủ</a>
+        <a href="index.html">Sản phẩm</a>
+      </nav>
+      <div class="topbar__brand-wrapper">
+        <div class="topbar__brand">
+          <a href="index.html">WBS</a>
+        </div>
+      </div>
+      <div class="topbar__actions">
+        <div class="search">
+          <input placeholder="Tìm kiếm sản phẩm" />
+          <button aria-label="Tìm kiếm"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+        <a href="javascript:void(0)" class="header-action-btn header-user">
+          <i class="fa-solid fa-user"></i> Tài khoản
+        </a>
+        <a href="cart.html" class="header-cart-wrapper">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span class="header-cart-badge" id="cartBadge">0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="orders-container">
+      <h2>Đơn hàng của bạn</h2>
+      <div id="ordersList">
+        <table class="order-table">
+          <thead>
+            <tr>
+              <th>Mã đơn hàng</th>
+              <th>Khách hàng</th>
+              <th>Ngày mua</th>
+              <th>Tổng tiền</th>
+              <th>Trạng thái</th>
+              <th>Chi tiết đơn hàng</th>
+            </tr>
+          </thead>
+          <tbody id="ordersTableBody">
+            <tr>
+              <td colspan="6" style="text-align: center; padding: 40px;">Đang tải danh sách đơn hàng...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const userStr = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+      if (!userStr) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const user = JSON.parse(userStr);
+      const tbody = document.getElementById('ordersTableBody');
+
+      try {
+        const response = await fetch(`http://localhost:3000/api/orders/user/${user.id}`);
+        const data = await response.json();
+
+        if (data.success && data.orders.length > 0) {
+          tbody.innerHTML = '';
+          data.orders.forEach(order => {
+            const row = document.createElement('tr');
+            const date = new Date(order.created_at).toLocaleDateString('vi-VN');
+            let displayStatus = order.status;
+            if (displayStatus === 'Chờ xử lý') displayStatus = 'Đã đặt';
+            let statusClass = 'status-pending';
+            if (displayStatus === 'Hoàn thành') statusClass = 'status-completed';
+            else if (displayStatus === 'Đang giao') statusClass = 'status-shipping';
+            else if (displayStatus === 'Chờ thanh toán') statusClass = 'status-pending-pay';
+            else if (displayStatus === 'Đã thanh toán') statusClass = 'status-paid';
+
+            row.innerHTML = `
+              <td data-label="Mã đơn hàng">${order.id}</td>
+              <td data-label="Khách hàng">${user.fullname}</td>
+              <td data-label="Ngày mua">${date}</td>
+              <td data-label="Tổng tiền"><strong>${Number(order.total_amount).toLocaleString()}đ</strong></td>
+              <td data-label="Trạng thái"><span class="status-badge ${statusClass}">${displayStatus}</span></td>
+              <td data-label="Chi tiết đơn hàng"><a href="order-detail.html?id=${order.id}" class="btn-details">Chi tiết</a></td>
+            `;
+            tbody.appendChild(row);
+          });
+        } else {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px;">Bạn chưa thực hiện đơn hàng nào.</td></tr>';
+        }
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: red; padding: 40px;">Lỗi khi tải dữ liệu đơn hàng.</td></tr>';
+      }
+    });
+
+
+  </script>
+
+  <!-- Chatbot Widget -->
+  <div class="chatbot-container">
+    <button class="chatbot-button" onclick="toggleChatbot()">💬</button>
+    <div class="chatbot-window" id="chatbotWindow">
+      <div class="chatbot-header">
+        <h3>WBS Chat với chúng tôi</h3>
+        <button class="chatbot-close" onclick="toggleChatbot()">×</button>
+      </div>
+      <div class="chatbot-messages" id="chatbotMessages">
+        <div class="message bot">
+          <div class="message-avatar">WBS</div>
+          <div>
+            <div class="message-content">
+              Xin chào! Tôi là chatbot của WBS. Tôi có thể giúp gì cho bạn?
+            </div>
+            <div class="quick-replies">
+              <span class="quick-reply" onclick="sendQuickReply('Sản phẩm nào đang hot?')">Sản phẩm hot</span>
+              <span class="quick-reply" onclick="sendQuickReply('Giá cả như thế nào?')">Giá cả</span>
+              <span class="quick-reply" onclick="sendQuickReply('Chính sách đổi trả')">Đổi trả</span>
+              <span class="quick-reply" onclick="sendQuickReply('Vận chuyển')">Vận chuyển</span>
+              <span class="quick-reply" onclick="sendQuickReply('Liên hệ hotline')">Liên hệ hotline</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chatbot-input">
+        <input type="text" id="chatbotInput" placeholder="Nhập tin nhắn..." onkeypress="handleKeyPress(event)">
+        <button class="chatbot-send" onclick="sendMessage()">➤</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="chatbot.js"></script>
+</body>
+
+</html>

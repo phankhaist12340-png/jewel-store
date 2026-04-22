@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>WBS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <nav class="topbar__menu">
+        <a href="index.html">Trang chủ</a>
+        <a href="index.html">Sản phẩm</a>
+      </nav>
+      <div class="topbar__brand-wrapper">
+        <div class="topbar__brand">
+          <a href="#">WBS</a>
+        </div>
+      </div>
+      <div class="topbar__actions">
+        <div class="search">
+          <input placeholder="Tìm kiếm sản phẩm" />
+          <button aria-label="Tìm kiếm"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+        <a href="login.html" class="header-action-btn header-user">
+          <i class="fa-solid fa-user"></i> Tài khoản
+        </a>
+        <a href="cart.html" class="header-cart-wrapper">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span class="header-cart-badge" id="cartBadge">0</span>
+        </a>
+      </div>
+      <button class="hamburger" aria-label="Mở menu">☰</button>
+    </div>
+  </header>
+
+  <!-- Hero / Slider -->
+  <section class="hero">
+    <div class="container">
+      <div class="slider" id="slider">
+        <div class="slide is-active" style="--bg:url('');">
+          <div class="slide__content">
+          </div>
+          <img class="slide__model"
+            src="https://cdn.huythanhjewelry.vn/storage/photos/shares/article/Banner%20website%202026/Nha%CC%82%CC%83n%20ca%CC%82%CC%80u%20ho%CC%82n%2017T%20%284%29.jpg"
+            alt="model">
+        </div>
+        <div class="slide" style="--bg:url('');">
+          <div class="slide__content">
+            <p class="caption"></p>
+          </div>
+          <img class="slide__model"
+            src="https://cdn.huythanhjewelry.vn/storage/photos/shares/article/Banner%20website%202026/DC-(1).jpg"
+            alt="model">
+        </div>
+        <div class="slide">
+          <img class="slide__model"
+            src="https://cdn.huythanhjewelry.vn/storage/htj-utils-cdn/uploads/20260416/nha____n_trang_su____c__2__1776324315_2845.jpg"
+            alt="model">
+        </div>
+
+        <button class="nav prev" data-dir="-1">❮</button>
+        <button class="nav next" data-dir="1">❯</button>
+
+        <div class="dots" id="dots"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HANG MOI VE -->
+  <section class="section">
+    <div class="container">
+      <div class="section__head">
+        <h3>HÀNG MỚI VỀ</h3>
+        <div class="tabs">
+          <button class="tab is-active">Nổi bật</button>
+        </div>
+      </div>
+      <div class="grid" id="productGrid">
+        <div class="card" style="display:flex;align-items:center;justify-content:center;min-height:180px;">
+          <div class="card__body" style="text-align:center;">
+            <h4 style="margin:0 0 8px;">Đang tải sản phẩm...</h4>
+            <div style="color:#6c757d;font-size:13px;">Vui lòng chờ trong giây lát</div>
+          </div>
+        </div>
+      </div>
+      <div class="center">
+        <a class="btn ghost" href="#">Xem tất cả</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer__grid">
+      <div class="brand-col">
+        <div class="footer__brand">WBS</div>
+        <div class="socials">
+          <a href="#" aria-label="Facebook">f</a>
+          <a href="#" aria-label="Google">G</a>
+          <a href="#" aria-label="Instagram">◎</a>
+          <a href="#" aria-label="Zalo">Z</a>
+          <a href="#" aria-label="YouTube">▶</a>
+        </div>
+        <div class="hotline">HOTLINE: 01234556</div>
+      </div>
+
+      <div class="col">
+        <h5>Giới thiệu</h5>
+        <a href="#">Về WBS</a>
+        <a href="#">Tuyển dụng</a>
+        <a href="#">Hệ thống cửa hàng</a>
+      </div>
+
+      <div class="col">
+        <h5>Dịch vụ khách hàng</h5>
+        <a href="#">Chính sách điều khoản</a>
+        <a href="#">Hướng dẫn mua hàng</a>
+        <a href="#">Chính sách thanh toán</a>
+        <a href="#">Chính sách đổi trả</a>
+        <a href="#">Chính sách bảo hành</a>
+        <a href="#">Chính sách giao nhận vận chuyển</a>
+        <a href="#">Chính sách thẻ thành viên</a>
+        <a href="#">Q&A</a>
+      </div>
+
+      <div class="col">
+        <h5>Liên hệ</h5>
+        <a href="#">Hotline</a>
+        <a href="#">Email</a>
+        <a href="#">Live Chat</a>
+        <a href="#">Messenger</a>
+        <a href="#">Liên hệ</a>
+      </div>
+
+    </div>
+
+    <div class="copyright">
+      ©WBS All rights reserved
+    </div>
+  </footer>
+
+  <!-- Chatbot Widget -->
+  <div class="chatbot-container">
+    <button class="chatbot-button" onclick="toggleChatbot()">💬</button>
+    <div class="chatbot-window" id="chatbotWindow">
+      <div class="chatbot-header">
+        <h3>WBS Chat với chúng tôi</h3>
+        <button class="chatbot-close" onclick="toggleChatbot()">×</button>
+      </div>
+      <div class="chatbot-messages" id="chatbotMessages">
+        <div class="message bot">
+          <div class="message-avatar">WBS</div>
+          <div>
+            <div class="message-content">
+              Xin chào! Tôi là chatbot của WBS. Tôi có thể giúp gì cho bạn?
+            </div>
+            <div class="quick-replies">
+              <span class="quick-reply" onclick="sendQuickReply('Sản phẩm nào đang hot?')">Sản phẩm hot</span>
+              <span class="quick-reply" onclick="sendQuickReply('Giá cả như thế nào?')">Giá cả</span>
+              <span class="quick-reply" onclick="sendQuickReply('Chính sách đổi trả')">Đổi trả</span>
+              <span class="quick-reply" onclick="sendQuickReply('Vận chuyển')">Vận chuyển</span>
+              <span class="quick-reply" onclick="sendQuickReply('Liên hệ hotline')">Liên hệ hotline</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chatbot-input">
+        <input type="text" id="chatbotInput" placeholder="Nhập tin nhắn..." onkeypress="handleKeyPress(event)">
+        <button class="chatbot-send" onclick="sendMessage()">➤</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="chatbot.js"></script>
+</body>
+
+</html>

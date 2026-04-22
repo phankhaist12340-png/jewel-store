@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Dashboard - WBS</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Icons (Phosphor Icons - Light/Elegant) -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <!-- Icons (Font Awesome - For Index parity) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Dashboard Styles -->
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <a href="#" class="brand">
+        WBS
+      </a>
+    </div>
+
+    <nav class="nav-links">
+      <a href="#" class="nav-item active" id="nav-overview" onclick="switchSection('overview')">
+        Tổng quan
+      </a>
+      <a href="#" class="nav-item" id="nav-products" onclick="switchSection('products')">
+        Quản lý sản phẩm
+      </a>
+      <a href="#" class="nav-item" id="nav-orders" onclick="switchSection('orders')">
+        Quản lý đơn hàng
+      </a>
+      <a href="#" class="nav-item" id="nav-customers" onclick="switchSection('customers')">
+        Quản lý tài khoản
+      </a>
+      <a href="login.html" class="nav-item" style="margin-top: auto;"
+        onclick="localStorage.removeItem('currentUser'); sessionStorage.removeItem('currentUser');">
+        Đăng xuất
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content" style="max-width: 1300px;">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="page-title">
+        <h1 id="main-title">Tổng quan</h1>
+        <p id="main-subtitle"></p>
+      </div>
+
+      <div class="topbar-actions">
+        <button class="profile-btn"
+          onclick="if(confirm('Bạn có muốn đăng xuất?')) { localStorage.removeItem('currentUser'); sessionStorage.removeItem('currentUser'); window.location.href='login.html'; }">
+          <div class="avatar"><i class="fa-solid fa-user"></i></div>
+          <span id="admin-name-display">Admin</span>
+          <i class="fa-solid fa-caret-down" style="color: #888; font-size: 12px;"></i>
+        </button>
+      </div>
+    </header>
+
+    <div id="overview-section">
+      <div class="stats-grid"
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; margin-bottom: 30px;">
+        <div class="stat-card"
+          style="background: #fff; padding: 25px 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;">
+          <h3 style="color: #666; font-size: 15px; margin: 0; white-space: nowrap;">Tổng doanh thu</h3>
+          <p id="stat-revenue"
+            style="font-size: 26px; font-weight: bold; color: #2e7d32; margin: 0; line-height: 1; white-space: nowrap;">
+          </p>
+        </div>
+        <div class="stat-card"
+          style="background: #fff; padding: 25px 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;">
+          <h3 style="color: #666; font-size: 15px; margin: 0; white-space: nowrap;">Tổng đơn hàng</h3>
+          <p id="stat-orders" style="font-size: 26px; font-weight: bold; color: #1565c0; margin: 0; line-height: 1;">
+          </p>
+        </div>
+        <div class="stat-card"
+          style="background: #fff; padding: 25px 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;">
+          <h3 style="color: #666; font-size: 15px; margin: 0; white-space: nowrap;">Khách hàng</h3>
+          <p id="stat-customers" style="font-size: 26px; font-weight: bold; color: #e65100; margin: 0; line-height: 1;">
+          </p>
+        </div>
+        <div class="stat-card"
+          style="background: #fff; padding: 25px 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;">
+          <h3 style="color: #666; font-size: 15px; margin: 0; white-space: nowrap;">Sản phẩm</h3>
+          <p id="stat-products" style="font-size: 26px; font-weight: bold; color: #4527a0; margin: 0; line-height: 1;">
+          </p>
+        </div>
+        <div class="stat-card"
+          style="background: #fff; padding: 25px 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;">
+          <h3 style="color: #666; font-size: 15px; margin: 0; white-space: nowrap;">Tổng đơn đã hủy</h3>
+          <p id="stat-canceled" style="font-size: 26px; font-weight: bold; color: #d32f2f; margin: 0; line-height: 1;">
+          </p>
+        </div>
+      </div>
+      <div class="chart-container"
+        style="background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); max-width: 800px; margin: 0 auto;">
+        <h3 style="margin-bottom: 20px; font-family: 'Playfair Display', serif; text-align: center;">Biểu đồ doanh thu 7
+          ngày qua</h3>
+        <div style="height: 300px; position: relative;">
+          <canvas id="revenueChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Management Section (Hidden by default) -->
+    <div id="products-section" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Danh sách sản phẩm</h2>
+          <div style="display: flex; gap: 10px;">
+            <button class="btn-cancel" style="padding: 8px 16px;" onclick="openAddProductModal()">Thêm sản phẩm</button>
+            <button class="btn-cancel" style="padding: 8px 16px;" onclick="fetchProducts()">Làm mới</button>
+          </div>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Tên sản phẩm</th>
+                <th>Mã Sản phẩm</th>
+                <th>Loại sản phẩm</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <th>Mô tả sản phẩm</th>
+                <th>Hình ảnh</th>
+                <th style="text-align: right;">Tùy chọn</th>
+              </tr>
+            </thead>
+            <tbody id="product-table-body">
+              <!-- Dữ liệu sản phẩm sẽ được chèn vào đây -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Customer Management Section (Hidden by default) -->
+    <div id="customers-section" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Danh sách khách hàng</h2>
+          <div style="display: flex; gap: 10px;">
+            <button class="btn-cancel" style="padding: 8px 16px;" onclick="addCustomer()">Thêm tài khoản</button>
+            <button class="btn-cancel" style="padding: 8px 16px;" onclick="fetchCustomers()">Làm mới</button>
+          </div>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Họ tên</th>
+                <th>Email</th>
+                <th>Số điện thoại</th>
+                <th>Địa chỉ</th>
+                <th>Vai trò</th>
+                <th style="text-align: right;">Tùy chọn</th>
+              </tr>
+            </thead>
+            <tbody id="customer-table-body">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Orders Management Section -->
+    <div id="orders-section" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Danh sách đơn hàng</h2>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <select id="order-status-filter" style="padding: 8px; border-radius: 4px; border: 1px solid #ddd;"
+              onchange="filterOrders()">
+              <option value="">Tất cả trạng thái</option>
+              <option value="Chờ thanh toán">Chờ thanh toán</option>
+              <option value="Đã đặt">Đã đặt</option>
+              <option value="Đã thanh toán">Đã thanh toán</option>
+              <option value="Đang giao">Đang giao</option>
+              <option value="Hoàn thành">Hoàn thành</option>
+              <option value="Đã hủy">Đã hủy</option>
+            </select>
+            <button class="btn-cancel" style="padding: 8px 16px;" onclick="fetchOrders()">Làm mới</button>
+          </div>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Mã đơn</th>
+                <th>Khách hàng</th>
+                <th>Email</th>
+                <th>Ngày đặt</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+                <th style="text-align: right;">Tùy chọn</th>
+              </tr>
+            </thead>
+            <tbody id="order-table-body">
+              <!-- Dữ liệu đơn hàng sẽ được chèn vào đây -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+  </main>
+
+  <!-- Add Product Modal -->
+  <div id="addProductModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Thêm sản phẩm mới</h2>
+        <span class="close-modal" onclick="closeAddProductModal()">&times;</span>
+      </div>
+      <form id="addProductForm" onsubmit="createNewProduct(event)">
+        <div class="form-group">
+          <label for="add-prod-id-val">Mã Sản phẩm</label>
+          <input type="text" id="add-prod-id-val" required>
+        </div>
+        <div class="form-group">
+          <label for="add-prod-name">Tên sản phẩm</label>
+          <input type="text" id="add-prod-name" required>
+        </div>
+        <div class="form-group">
+          <label for="add-prod-category">Loại sản phẩm</label>
+          <input type="text" id="add-prod-category" required>
+        </div>
+        <div class="form-group">
+          <label for="add-prod-price">Giá (VND)</label>
+          <input type="number" id="add-prod-price" required>
+        </div>
+        <div class="form-group">
+          <label for="add-prod-stock">Số lượng</label>
+          <input type="number" id="add-prod-stock" required>
+        </div>
+        <div class="form-group">
+          <label for="add-prod-description">Mô tả sản phẩm</label>
+          <textarea id="add-prod-description" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Hình ảnh</label>
+          <div class="file-upload-wrapper">
+            <button type="button" class="btn-upload" onclick="document.getElementById('add-prod-file').click()">Chọn
+              ảnh</button>
+            <span id="add-file-name" class="file-name-display">Chưa chọn ảnh nào</span>
+            <input type="file" id="add-prod-file" accept="image/*" multiple
+              onchange="updateFileName(this, 'add-file-name')">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" onclick="closeAddProductModal()">Hủy bỏ</button>
+          <button type="submit" class="btn-gold">Thêm mới</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Simple Edit Customer Modal -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Chỉnh sửa người dùng</h2>
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+      </div>
+      <form id="editForm" onsubmit="saveCustomer(event)">
+        <input type="hidden" id="edit-id">
+        <div class="form-group">
+          <label for="edit-fullname">Họ và tên</label>
+          <input type="text" id="edit-fullname" required>
+        </div>
+        <div class="form-group">
+          <label for="edit-email">Email</label>
+          <input type="email" id="edit-email" required>
+        </div>
+        <div class="form-group">
+          <label for="edit-phone">Số điện thoại</label>
+          <input type="text" id="edit-phone" required>
+        </div>
+        <div class="form-group">
+          <label for="edit-address">Địa chỉ</label>
+          <textarea id="edit-address" rows="2"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" onclick="closeModal()">Hủy bỏ</button>
+          <button type="submit" class="btn-gold">Cập nhật</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Account Modal -->
+  <div id="addModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Thêm tài khoản mới</h2>
+        <span class="close-modal" onclick="closeAddModal()">&times;</span>
+      </div>
+      <form id="addForm" onsubmit="createCustomer(event)">
+        <div class="form-group">
+          <label for="add-fullname">Họ và tên</label>
+          <input type="text" id="add-fullname" required>
+        </div>
+        <div class="form-group">
+          <label for="add-email">Email</label>
+          <input type="email" id="add-email" required>
+        </div>
+        <div class="form-group">
+          <label for="add-phone">Số điện thoại</label>
+          <input type="text" id="add-phone" required>
+        </div>
+        <div class="form-group">
+          <label for="add-password">Mật khẩu</label>
+          <input type="text" id="add-password" required>
+        </div>
+        <div class="form-group">
+          <label for="add-address">Địa chỉ</label>
+          <textarea id="add-address" rows="2"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" onclick="closeAddModal()">Hủy bỏ</button>
+          <button type="submit" class="btn-gold">Thêm mới</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Product Modal -->
+  <div id="editProductModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Chỉnh sửa sản phẩm</h2>
+        <span class="close-modal" onclick="closeEditProductModal()">&times;</span>
+      </div>
+      <form id="editProductForm" onsubmit="saveProduct(event)">
+        <input type="hidden" id="edit-prod-id">
+        <div class="form-group">
+          <label for="edit-prod-id-val">Mã Sản phẩm</label>
+          <input type="text" id="edit-prod-id-val">
+        </div>
+        <div class="form-group">
+          <label for="edit-prod-name">Tên sản phẩm</label>
+          <input type="text" id="edit-prod-name" required>
+        </div>
+        <div class="form-group">
+          <label for="edit-prod-category">Loại sản phẩm</label>
+          <input type="text" id="edit-prod-category" required>
+        </div>
+        <div class="form-group">
+          <label for="edit-prod-price">Giá (₫)</label>
+          <input type="number" id="edit-prod-price" required>
+        </div>
+        <div class="form-group">
+          <label for="edit-prod-stock">Số lượng</label>
+          <input type="number" id="edit-prod-stock" required>
+        </div>
+        <div class="form-group">
+          <label for="edit-prod-description">Mô tả sản phẩm</label>
+          <textarea id="edit-prod-description" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Hình ảnh</label>
+          <div class="file-upload-wrapper">
+            <button type="button" class="btn-upload" onclick="document.getElementById('edit-prod-file').click()">Chọn
+              ảnh</button>
+            <span id="edit-file-name" class="file-name-display">Giữ ảnh cũ hoặc chọn mới</span>
+            <input type="file" id="edit-prod-file" accept="image/*" multiple
+              onchange="updateFileName(this, 'edit-file-name')">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" onclick="closeEditProductModal()">Hủy bỏ</button>
+          <button type="submit" class="btn-gold">Cập nhật</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Order Modal -->
+  <div id="editOrderModal" class="modal">
+    <div class="modal-content" style="max-width: 600px;">
+      <div class="modal-header">
+        <h2>Chi tiết đơn hàng #<span id="edit-order-id-display"></span></h2>
+        <span class="close-modal" onclick="closeEditOrderModal()">&times;</span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; font-size: 14px;">
+        <div><strong>Khách hàng:</strong> <span id="edit-order-customer"></span></div>
+        <div><strong>Số điện thoại:</strong> <span id="edit-order-phone"></span></div>
+        <div><strong>Email:</strong> <span id="edit-order-email"></span></div>
+        <div><strong>Ngày đặt:</strong> <span id="edit-order-date"></span></div>
+        <div style="grid-column: 1 / -1;"><strong>Địa chỉ:</strong> <span id="edit-order-address"></span></div>
+      </div>
+
+      <h3 style="margin-bottom: 10px; font-size: 16px;">Sản phẩm đã đặt</h3>
+      <div id="edit-order-items-list"
+        style="max-height: 200px; overflow-y: auto; margin-bottom: 20px; border: 1px solid #eee; border-radius: 8px; padding: 10px;">
+        <!-- Items go here -->
+      </div>
+
+      <div style="text-align: right; margin-bottom: 20px; font-size: 16px;">
+        <strong>Tổng tiền:</strong> <span id="edit-order-total" style="font-weight: bold;"></span>
+      </div>
+
+      <form id="editOrderForm" onsubmit="saveOrderStatus(event)">
+        <input type="hidden" id="edit-order-id">
+        <div class="form-group">
+          <label for="edit-order-status"><strong>Cập nhật trạng thái</strong></label>
+          <select id="edit-order-status" required
+            style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ddd;">
+            <option value="Chờ thanh toán">Chờ thanh toán</option>
+            <option value="Đã đặt">Đã đặt</option>
+            <option value="Đã thanh toán">Đã thanh toán</option>
+            <option value="Đang giao">Đang giao</option>
+            <option value="Hoàn thành">Hoàn thành</option>
+            <option value="Đã hủy">Đã hủy</option>
+          </select>
+        </div>
+        <div class="modal-footer" style="display: flex; justify-content: flex-end; align-items: center;">
+          <div style="display: flex; gap: 10px;">
+            <button type="button" class="btn-cancel" onclick="closeEditOrderModal()">Hủy bỏ</button>
+            <button type="submit" class="btn-gold">Lưu</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Dashboard Script -->
+  <script src="dashboard.js"></script>
+</body>
+
+</html>
