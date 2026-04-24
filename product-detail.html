@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Chi tiết sản phẩm - WBS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <nav class="topbar__menu">
+        <a href="index.html">Trang chủ</a>
+        <a href="index.html">Sản phẩm</a>
+      </nav>
+      <div class="topbar__brand-wrapper">
+        <div class="topbar__brand">
+          <a href="index.html">WBS</a>
+        </div>
+      </div>
+      <div class="topbar__actions">
+        <div class="search">
+          <input placeholder="Tìm kiếm sản phẩm" />
+          <button aria-label="Tìm kiếm"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+        <a href="login.html" class="header-action-btn header-user">
+          <i class="fa-solid fa-user"></i> Tài khoản
+        </a>
+        <a href="cart.html" class="header-cart-wrapper">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span class="header-cart-badge" id="cartBadge">0</span>
+        </a>
+      </div>
+      <button class="hamburger" aria-label="Mở menu">☰</button>
+    </div>
+  </header>
+
+  <!-- Breadcrumbs -->
+  <nav class="breadcrumbs">
+    <div class="container">
+      <a href="index.html">Trang chủ</a>
+      <span> - </span>
+      <span>Chi tiết sản phẩm</span>
+    </div>
+  </nav>
+
+  <!-- Product Detail -->
+  <section class="product-detail">
+    <div class="container">
+      <div class="product-detail__grid">
+        <!-- Left: Main Image -->
+        <div class="product-images">
+          <div class="product-main-image" onclick="openImageModal(this.querySelector('img').src)">
+            <div class="image-zoom-wrapper">
+              <img id="mainImage"
+                src="https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Y2xvdGh8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=800"
+                alt="Áo thun cotton" />
+            </div>
+            <div class="zoom-hint"><i class="fa-solid fa-magnifying-glass"></i> Click để phóng to</div>
+          </div>
+          <!-- Thumbnails -->
+          <div class="product-thumbnails" id="productThumbnails"
+            style="display: flex; gap: 10px; margin-top: 15px; overflow-x: auto;">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Right: Product Info -->
+        <div class="product-info">
+          <h1 class="product-title">................</h1>
+
+          <div class="product-meta">
+            <span class="product-sku">Mã Sản phẩm: <span id="product-code-display">...</span></span>
+          </div>
+
+          <div class="product-price">₫</div>
+
+          <!-- Free Size Notice -->
+          <div class="freesize-notice">
+            <span><strong>Lưu ý:</strong> Sản phẩm Free size. Vui lòng viết vào ghi chú trong thanh toán.</span>
+          </div>
+
+          <div class="product-quantity">
+            <label>Số lượng:</label>
+            <div class="quantity-controls">
+              <button class="qty-btn" onclick="changeQuantity(-1)">-</button>
+              <input type="number" id="quantity" value="1" min="1" />
+              <button class="qty-btn" onclick="changeQuantity(1)">+</button>
+            </div>
+          </div>
+
+          <div class="product-actions">
+            <button class="btn btn-primary" onclick="addToCart()"><i class="fa-solid fa-cart-shopping"></i> THÊM VÀO
+              GIỎ</button>
+            <button class="btn btn-secondary" onclick="addToCart(); window.location.href='cart.html';">MUA HÀNG</button>
+          </div>
+
+          <!-- Product Description -->
+          <div class="product-description-container">
+            <h3 class="description-header">MÔ TẢ SẢN PHẨM</h3>
+            <div class="description-content" id="product-description-display">
+              Đang tải mô tả...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chatbot Widget -->
+  <div class="chatbot-container">
+    <button class="chatbot-button" onclick="toggleChatbot()">💬</button>
+    <div class="chatbot-window" id="chatbotWindow">
+      <div class="chatbot-header">
+        <h3>WBS Chat với chúng tôi</h3>
+        <button class="chatbot-close" onclick="toggleChatbot()">×</button>
+      </div>
+      <div class="chatbot-messages" id="chatbotMessages">
+        <div class="message bot">
+          <div class="message-avatar">WBS</div>
+          <div>
+            <div class="message-content">
+              Xin chào! Tôi là chatbot của WBS. Tôi có thể giúp gì cho bạn?
+            </div>
+            <div class="quick-replies">
+              <span class="quick-reply" onclick="sendQuickReply('Sản phẩm nào đang hot?')">Sản phẩm hot</span>
+              <span class="quick-reply" onclick="sendQuickReply('Giá cả như thế nào?')">Giá cả</span>
+              <span class="quick-reply" onclick="sendQuickReply('Chính sách đổi trả')">Đổi trả</span>
+              <span class="quick-reply" onclick="sendQuickReply('Vận chuyển')">Vận chuyển</span>
+              <span class="quick-reply" onclick="sendQuickReply('Liên hệ hotline')">Liên hệ hotline</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chatbot-input">
+        <input type="text" id="chatbotInput" placeholder="Nhập tin nhắn..." onkeypress="handleKeyPress(event)">
+        <button class="chatbot-send" onclick="sendMessage()">➤</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="chatbot.js"></script>
+</body>
+
+</html>

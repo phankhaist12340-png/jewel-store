@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Thông tin tài khoản - WBS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .profile-container {
+      max-width: 600px;
+      margin: 60px auto;
+      padding: 40px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    .profile-container h2 {
+      text-align: center;
+      margin-bottom: 24px;
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+    }
+
+    .btn-login {
+      display: block;
+      width: fit-content;
+      min-width: 200px;
+      margin: 20px auto 0;
+      padding: 14px 40px;
+      background: #000;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: background 0.3s;
+    }
+
+    .btn-login:hover {
+      background: #333;
+    }
+
+    .password-wrapper {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      color: #777;
+      display: flex;
+      align-items: center;
+    }
+
+    .logout-btn-wrapper {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .btn-logout {
+      background: transparent;
+      color: #e74c3c;
+      border: 1px solid #e74c3c;
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-logout:hover {
+      background: #e74c3c;
+      color: white;
+    }
+
+    .message-box {
+      margin-bottom: 20px;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      display: none;
+    }
+
+    .message-box.success {
+      background: #E8F5E9;
+      color: #2E7D32;
+      border: 1px solid #C8E6C9;
+      display: block;
+    }
+
+    .message-box.error {
+      background: #FFEBEE;
+      color: #C62828;
+      border: 1px solid #FFCDD2;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <nav class="topbar__menu">
+        <a href="index.html">Trang chủ</a>
+        <a href="index.html">Sản phẩm</a>
+      </nav>
+      <div class="topbar__brand-wrapper">
+        <div class="topbar__brand">
+          <a href="index.html">WBS</a>
+        </div>
+      </div>
+      <div class="topbar__actions">
+        <div class="search">
+          <input placeholder="Tìm kiếm sản phẩm" />
+          <button aria-label="Tìm kiếm"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+        <a href="profile.html" class="header-action-btn header-user">
+          <i class="fa-solid fa-user"></i> Tài khoản
+        </a>
+        <a href="cart.html" class="header-cart-wrapper">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span class="header-cart-badge" id="cartBadge">0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Profile Form -->
+  <main class="container">
+    <div class="profile-container">
+      <h2>Thông tin tài khoản</h2>
+      <div id="profileMessage" class="message-box"></div>
+
+      <form id="profileForm">
+        <div class="form-group">
+          <label for="fullname">Họ và tên</label>
+          <input type="text" id="fullname" placeholder="Nhập họ và tên" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="Nhập email" required pattern=".*@gmail\.com$" title="Vui lòng nhập email có định dạng @gmail.com" />
+        </div>
+        <div class="form-group">
+          <label for="phone">Số điện thoại</label>
+          <input type="tel" id="phone" placeholder="Nhập số điện thoại" required />
+        </div>
+        <div class="form-group">
+          <label for="address">Địa chỉ</label>
+          <input type="text" id="address" placeholder="Nhập địa chỉ" />
+        </div>
+        <div class="form-group" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+          <label for="password">Mật khẩu</label>
+          <div class="password-wrapper">
+            <input type="password" id="password" placeholder="Nhập mật khẩu" />
+            <button type="button" class="toggle-password" onclick="toggleProfilePassword()">
+              <i class="fa-solid fa-eye" id="toggleIcon"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-login" style="width: 100%;">Cập nhật thông tin</button>
+      </form>
+
+      <div class="logout-btn-wrapper">
+        <button class="btn-login" id="logoutBtn" style="width: 100%;">Đăng xuất</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer__grid">
+      <div class="brand-col">
+        <div class="footer__brand">WBS</div>
+        <div class="socials">
+          <a href="#" aria-label="Facebook">f</a>
+          <a href="#" aria-label="Google">G</a>
+          <a href="#" aria-label="Instagram">◎</a>
+          <a href="#" aria-label="Zalo">Z</a>
+          <a href="#" aria-label="YouTube">▶</a>
+        </div>
+      </div>
+      <div class="copyright" style="grid-column: 1 / -1; margin-top: 40px; text-align: center;">
+        ©WBS All rights reserved
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check login status
+      const userStr = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+      if (!userStr) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      let user = JSON.parse(userStr);
+
+      // Điền thông tin vào form (từ cache trước để nhanh)
+      document.getElementById('fullname').value = user.fullname || user.name || '';
+      document.getElementById('email').value = user.email || '';
+      document.getElementById('phone').value = user.phone || '';
+      document.getElementById('address').value = user.address || '';
+      if (user.password) {
+        document.getElementById('password').value = user.password;
+      }
+
+      // Fetch thông tin mới nhất từ CSDL (bao gồm mật khẩu)
+      const fetchUserData = async () => {
+        try {
+          const response = await fetch(`http://localhost:3000/api/user/${user.id}`);
+          const data = await response.json();
+          if (data.success) {
+            user = data.user;
+            document.getElementById('fullname').value = user.fullname || '';
+            document.getElementById('email').value = user.email || '';
+            document.getElementById('phone').value = user.phone || '';
+            document.getElementById('address').value = user.address || '';
+            document.getElementById('password').value = user.password || '';
+            
+            // Cập nhật lại cache
+            if (localStorage.getItem('currentUser')) {
+              localStorage.setItem('currentUser', JSON.stringify(user));
+            } else {
+              sessionStorage.setItem('currentUser', JSON.stringify(user));
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      };
+
+      fetchUserData();
+
+      const profileForm = document.getElementById('profileForm');
+      const profileMessage = document.getElementById('profileMessage');
+
+      profileForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const fullname = document.getElementById('fullname').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const address = document.getElementById('address').value.trim();
+        const password = document.getElementById('password').value;
+
+        if (!email.endsWith('@gmail.com')) {
+          profileMessage.textContent = 'Email phải có định dạng @gmail.com!';
+          profileMessage.className = 'message-box error';
+          return;
+        }
+
+        try {
+          const btnSubmit = profileForm.querySelector('button[type="submit"]');
+          btnSubmit.textContent = 'Đang xử lý...';
+          btnSubmit.disabled = true;
+
+          const response = await fetch(`http://localhost:3000/api/user/${user.id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ fullname, email, phone, address, password })
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            // Cập nhật lại thông tin mới vào cache
+            user.fullname = fullname;
+            user.email = email;
+            user.phone = phone;
+            user.address = address;
+
+            if (localStorage.getItem('currentUser')) {
+              localStorage.setItem('currentUser', JSON.stringify(user));
+            } else {
+              sessionStorage.setItem('currentUser', JSON.stringify(user));
+            }
+
+            // Cập nhật lại UI header (gọi hàm từ script.js)
+            if (typeof checkLoginStatus === 'function') {
+              checkLoginStatus();
+            }
+
+            profileMessage.textContent = 'Cập nhật thông tin thành công!';
+            profileMessage.className = 'message-box success';
+          } else {
+            profileMessage.textContent = data.message || 'Cập nhật thất bại!';
+            profileMessage.className = 'message-box error';
+          }
+        } catch (error) {
+          profileMessage.textContent = 'Lỗi kết nối đến máy chủ!';
+          profileMessage.className = 'message-box error';
+          console.error('Update error:', error);
+        } finally {
+          const btnSubmit = profileForm.querySelector('button[type="submit"]');
+          btnSubmit.textContent = 'Cập nhật thông tin';
+          btnSubmit.disabled = false;
+        }
+      });
+
+      // Handle logout
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        if (confirm('Bạn có muốn đăng xuất khỏi tài khoản?')) {
+          localStorage.removeItem('currentUser');
+          sessionStorage.removeItem('currentUser');
+          window.location.href = 'login.html';
+        }
+      });
+
+    });
+
+    function toggleProfilePassword() {
+      const passwordInput = document.getElementById('password');
+      const toggleIcon = document.getElementById('toggleIcon');
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.classList.remove('fa-eye');
+        toggleIcon.classList.add('fa-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        toggleIcon.classList.remove('fa-eye-slash');
+        toggleIcon.classList.add('fa-eye');
+      }
+    }
+  </script>
+</body>
+
+</html>
